@@ -44,7 +44,7 @@
 | # | 决策项 | 结论 |
 |---|---|---|
 | D1 | parse_transform 的角色 | **三种形态全要**：扩展点注册 + 内联模板 + 编译入口。详见 [06](06-parse-transform.md) |
-| D2 | 兼容性策略 | **改成标准 mustache 语义**（context stack）。现有模板需迁移，提供 `rebar3 mustache migrate` 辅助。详见 [03](03-semantics.md) |
+| D2 | 兼容性策略 | **改成标准 mustache 语义**（context stack）。现有模板需按 [03 §7](03-semantics.md#7-迁移方案) 的规则手工迁移。详见 [03](03-semantics.md) |
 | D3 | 构建系统与仓库归属 | **rebar3 为主**，plugin 放本仓 `rebar3_beamai_render/` 子目录，通过 `{subdir, ...}` 引用。erlang.mk 保留但降级 |
 | D4 | `ai_dom_node` / `ai_dom_render` | **删除**。与 mustache 无关、无内部引用、且 `ai_dom_render:render/2` 有必崩 bug |
 | D5 | 依赖 ailib | **彻底移除**。全部重新实现，运行期与测试期零依赖。详见 [02 §6](02-architecture.md#6-零依赖决策) |

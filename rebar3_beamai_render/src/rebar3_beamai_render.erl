@@ -14,8 +14,7 @@
 init(State) ->
     ok = ensure_core(),
     lists:foldl(fun(M, {ok, S}) -> M:init(S) end, {ok, State},
-                [rebar3_beamai_render_prv, rebar3_beamai_render_jinja,
-                 rebar3_beamai_render_migrate]).
+                [rebar3_beamai_render_mustache, rebar3_beamai_render_jinja]).
 
 %% @doc Make the compile cores reachable from the rebar3 VM.
 %%

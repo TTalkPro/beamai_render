@@ -1,7 +1,7 @@
 %%%-------------------------------------------------------------------
 %%% @doc The `rebar3 jinja' provider.
 %%%
-%%% Nothing but registration: the pipeline is rebar3_beamai_render_prv:run/3, which
+%%% Nothing but registration: the pipeline is rebar3_beamai_render_mustache:run/3, which
 %%% both engines share. Anything that looked engine-specific enough to belong
 %%% here would be a sign that the parameterisation is incomplete.
 %%% @end
@@ -34,6 +34,6 @@ init(State) ->
 do(State) ->
     {Args, _} = rebar_state:command_parsed_args(State),
     Force = proplists:get_value(force, Args, false),
-    rebar3_beamai_render_prv:run(State, beamai_jinja_engine, Force).
+    rebar3_beamai_render_mustache:run(State, beamai_jinja_engine, Force).
 
-format_error(Reason) -> rebar3_beamai_render_prv:format_error(Reason).
+format_error(Reason) -> rebar3_beamai_render_mustache:format_error(Reason).

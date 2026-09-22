@@ -10,7 +10,7 @@
 %%%
 %%% There is no cache file anywhere in the plugin: the generated module is
 %%% the cache, and it describes itself. Nothing here ever consults an mtime
-%%% to decide whether to recompile (see rebar3_beamai_render_prv for why).
+%%% to decide whether to recompile (see rebar3_beamai_render_mustache for why).
 %%% @end
 %%%-------------------------------------------------------------------
 -module(rebar3_beamai_render_scan).

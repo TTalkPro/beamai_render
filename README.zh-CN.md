@@ -66,7 +66,7 @@ mustache 的行为没有变化。完整说明见 [CHANGELOG.md](CHANGELOG.md)，
 + {{#items}}{{+ current}}<li>{{name}}</li>{{/ current}}{{/items}}
 ```
 
-规则：在 `{{#X}}` 内部，引用 `X` 自己的字段时去掉 `X.` 前缀。`rebar3 mustache migrate` 会做机械改写，无法确定的部分原样保留并列进报告。
+规则：在 `{{#X}}` 内部，引用 `X` 自己的字段时去掉 `X.` 前缀。
 
 **没有兼容开关，这是刻意的。** 同时支持两套语义会让编译器的作用域解析分叉，长期维护成本远高于一次性迁移。
 
@@ -240,15 +240,6 @@ views/layout/default.mustache ->  view_layout_default
 ```
 
 `/`、`-`、`.` 都归一为 `_`，所以 `shared/item.mustache` 和 `shared_item.mustache` 会撞名。plugin 会检测到并报错，而不是静默覆盖其中一个。
-
-### 迁移 0.3.x 的模板
-
-```sh
-rebar3 mustache migrate           # 只打印 diff
-rebar3 mustache migrate --write   # 落盘
-```
-
-原地改写，保留注释、空白和自定义分隔符。无法确定的部分 —— 比如引用了兄弟 section 的变量 —— 原样保留并列进报告，交由人工处理。
 
 ### Umbrella 项目
 

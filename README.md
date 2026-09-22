@@ -75,8 +75,7 @@ implementation does.
 ```
 
 The rule: inside `{{#X}}`, drop the `X.` prefix from references to `X`'s own
-fields. `rebar3 mustache migrate` does the mechanical part and reports what it
-could not decide.
+fields.
 
 There is deliberately no compatibility switch. Supporting both would fork the
 compiler's scope resolution, which costs more over time than migrating once.
@@ -309,17 +308,6 @@ views/layout/default.mustache ->  view_layout_default
 `/`, `-` and `.` all become `_`, so `shared/item.mustache` and
 `shared_item.mustache` would collide. The plugin detects that and fails rather
 than silently overwriting one with the other.
-
-### Migrating 0.3.x templates
-
-```sh
-rebar3 mustache migrate           # print a diff
-rebar3 mustache migrate --write   # apply it
-```
-
-It rewrites in place, preserving comments, whitespace and custom delimiters.
-Anything it cannot decide -- a reference to a sibling section's variable, say
--- is left alone and listed in the report for you to handle.
 
 ### erlang.mk
 

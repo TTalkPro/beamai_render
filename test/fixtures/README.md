@@ -21,7 +21,6 @@ rebar3 has no `path` resource for deps or plugins.
 |---|---|
 | `plugin_basic` | one app, four mustache templates, partials and the render API |
 | `plugin_errors` | templates that must fail, one per diagnostic |
-| `plugin_legacy` | a generated file from an older version, for the healing path |
 | `plugin_umbrella` | two apps whose templates collide on a module name |
 | `plugin_jinja` | inheritance, `super()`, an imported macro and an include |
 | `plugin_dual` | both engines writing into one `out_dir` -- the arrangement in which each provider's orphan collector used to delete the other's output |

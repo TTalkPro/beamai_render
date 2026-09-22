@@ -31,7 +31,6 @@ beamai_render 全面重构任务清单。任务细节见 [`tasks/`](tasks/)，�
 - [x] [T16](tasks/T16.md)
 - [x] [T17](tasks/T17.md)
 - [x] [T18](tasks/T18.md)
-- [x] [T19](tasks/T19.md)
 - [x] [T20](tasks/T20.md)
 
 ## 阶段 5 · parse_transform

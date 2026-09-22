@@ -33,10 +33,6 @@ all() ->
      illegal_name_detected,
      collision_detection,
      partials_exist_check,
-     rewrite_strips_one_level,
-     rewrite_leaves_hard_cases,
-     rewrite_is_idempotent,
-     diff_is_unified,
      %% end to end, rebar3 subprocess
      basic_compile,
      generated_file_shape,
@@ -63,8 +59,6 @@ all() ->
      dual_engines_share_an_out_dir,
      dual_engines_are_order_independent,
      dual_engine_module_conflict_is_reported,
-     migrate_prints_a_diff,
-     migrate_write_then_idempotent,
      fixtures_stay_clean].
 
 %%%===================================================================
@@ -368,71 +362,6 @@ partials_exist_check(_Config) ->
 %% A #mopts{} good enough for the pure checks, which look at two fields.
 mopts() -> #mopts{engine = beamai_mustache_engine, prefix = <<"view_">>}.
 
-rewrite_strips_one_level(_Config) ->
-    Opts = #{module => m, source => <<"t">>},
-    {Out1, N1, []} = rebar3_beamai_render_rewrite:file(
-                       <<"{{#user}}{{user.name}}{{/user}}">>, Opts),
-    ?assertEqual(<<"{{#user}}{{name}}{{/user}}">>, Out1),
-    ?assertEqual(1, N1),
-    %% Whitespace style inside the tag survives.
-    {Out2, 1, []} = rebar3_beamai_render_rewrite:file(
-                      <<"{{#user}}{{ user.name }}{{/user}}">>, Opts),
-    ?assertEqual(<<"{{#user}}{{ name }}{{/user}}">>, Out2),
-    %% All three prefixes go, and the closing tag follows its opening tag.
-    {Out3, 3, []} = rebar3_beamai_render_rewrite:file(
-                      <<"{{# items}}{{+ items.current}}<li>{{items.name}}</li>"
-                        "{{/ items.current}}{{/ items}}">>, Opts),
-    ?assertEqual(<<"{{# items}}{{+ current}}<li>{{name}}</li>"
-                   "{{/ current}}{{/ items}}">>, Out3),
-    %% A comment is not a reference.
-    {Out4, 0, []} = rebar3_beamai_render_rewrite:file(
-                      <<"{{#a}}{{! a.x is prose }}{{/a}}">>, Opts),
-    ?assertEqual(<<"{{#a}}{{! a.x is prose }}{{/a}}">>, Out4),
-    %% {{^x}} and {{+x}} do not push a scope, so their bodies keep their
-    %% prefixes; only their own key is subject to stripping.
-    {Out5, 0, []} = rebar3_beamai_render_rewrite:file(<<"{{^a}}{{a.x}}{{/a}}">>, Opts),
-    ?assertEqual(<<"{{^a}}{{a.x}}{{/a}}">>, Out5),
-    %% Custom delimiters are handled by position, not by pattern.
-    {Out6, 1, []} = rebar3_beamai_render_rewrite:file(
-                      <<"{{=<% %>=}}<%#a%><%a.x%><%/a%>">>, Opts),
-    ?assertEqual(<<"{{=<% %>=}}<%#a%><%x%><%/a%>">>, Out6).
-
-rewrite_leaves_hard_cases(_Config) ->
-    Opts = #{module => m, source => <<"t">>},
-    Src = <<"{{#a}}{{b.x}}{{/a}}\n{{#b}}ok{{/b}}\n{{#q}}{{*yield}}{{/q}}\n"
-            "{{#p}}{{> shared/item}}{{/p}}\n{{#m.n}}{{m.n.v}}{{/m.n}}\n">>,
-    {Out, _N, Manual} = rebar3_beamai_render_rewrite:file(Src, Opts),
-    Text = iolist_to_binary([[integer_to_list(L), " ", T, "\n"]
-                             || {L, T} <- Manual]),
-    ?assert(contains(Text, "sibling section b")),
-    ?assert(contains(Text, "lambda")),
-    ?assert(contains(Text, "partial")),
-    ?assert(contains(Text, "dotted section key")),
-    %% The sibling reference is left exactly as it was.
-    ?assert(contains(Out, "{{#a}}{{b.x}}{{/a}}")).
-
-rewrite_is_idempotent(_Config) ->
-    Opts = #{module => m, source => <<"t">>},
-    Src = <<"{{! items.x }}\n{{#user}}Hello {{ user.name }}!{{/user}}\n"
-            "{{# items}}{{+ items.current}}<li>{{items.name}}</li>"
-            "{{/ items.current}}{{/ items}}\n">>,
-    {Once, N, _} = rebar3_beamai_render_rewrite:file(Src, Opts),
-    ?assert(N > 0),
-    ?assertMatch({Once, 0, _}, rebar3_beamai_render_rewrite:file(Once, Opts)).
-
-diff_is_unified(_Config) ->
-    Old = <<"one\ntwo\nthree\n">>,
-    New = <<"one\nTWO\nthree\n">>,
-    Out = iolist_to_binary(rebar3_beamai_render_diff:unified("views/x.mustache",
-                                                      Old, New)),
-    ?assert(contains(Out, "--- a/views/x.mustache")),
-    ?assert(contains(Out, "+++ b/views/x.mustache")),
-    ?assert(contains(Out, "@@ ")),
-    ?assert(contains(Out, "-two")),
-    ?assert(contains(Out, "+TWO")),
-    ?assert(contains(Out, " one")),
-    ?assertEqual([], rebar3_beamai_render_diff:unified("x", Old, Old)).
-
 %%%===================================================================
 %%% End to end
 %%%===================================================================
@@ -728,52 +657,6 @@ mustache_template_staleness(Config) ->
                          <<"<p>{{name}} edited</p>\n">>),
     _ = ok_run(Dir, ["mustache"], Config),
     ?assert(mtime(Erl) > Before).
-
-migrate_prints_a_diff(Config) ->
-    Dir = project("plugin_legacy", Config),
-    _ = bootstrap(Dir, Config),
-    Flat = filename:join([Dir, "views", "flat.mustache"]),
-    Before = read(Flat),
-    Out = ok_run(Dir, ["mustache", "migrate"], Config),
-    ?assert(contains(Out, "--- a/views/flat.mustache")),
-    ?assert(contains(Out, "+{{#user}}Hello {{ name }}!{{/user}}")),
-    ?assert(contains(Out, "+{{# items}}{{+ current}}<li>{{name}}</li>"
-                          "{{/ current}}{{/ items}}")),
-    %% Custom delimiters are rewritten, comments are not.
-    ?assert(contains(Out, "+<%#thing%><%value%><%/thing%>")),
-    ?assert(contains(Out, " {{! items.x is a comment and must not be touched }}")),
-    %% The things it declines to decide are listed rather than guessed at.
-    ?assert(contains(Out, "manual review needed")),
-    ?assert(contains(Out, "sibling section b")),
-    ?assert(contains(Out, "lambda")),
-    %% Without --write nothing is written.
-    ?assertEqual(Before, read(Flat)).
-
-migrate_write_then_idempotent(Config) ->
-    Dir = project("plugin_legacy", Config),
-    _ = bootstrap(Dir, Config),
-    Flat = filename:join([Dir, "views", "flat.mustache"]),
-    _ = ok_run(Dir, ["mustache", "migrate", "--write"], Config),
-    ?assertEqual(<<"{{! items.x is a comment and must not be touched }}\n"
-                   "{{#user}}Hello {{ name }}!{{/user}}\n"
-                   "{{# items}}{{+ current}}<li>{{name}}</li>"
-                   "{{/ current}}{{/ items}}\n"
-                   "{{=<% %>=}}\n"
-                   "<%#thing%><%value%><%/thing%>\n">>, read(Flat)),
-    After = read(Flat),
-    %% Idempotent: a rewritten reference no longer carries the prefix, so the
-    %% second pass matches nothing.
-    Out = ok_run(Dir, ["mustache", "migrate"], Config),
-    ?assertEqual(After, read(Flat)),
-    ?assertNot(contains(Out, "--- a/views/flat.mustache")),
-    %% And what it produced still compiles. This fixture has no provider hook,
-    %% so the compiler has to be asked for explicitly.
-    _ = ok_run(Dir, ["mustache"], Config),
-    _ = ok_run(Dir, ["compile"], Config),
-    ?assert(filelib:is_regular(filename:join([Dir, "_gen", "view_flat.erl"]))),
-    ?assert(filelib:is_regular(
-              filename:join([Dir, "_build", "default", "lib", "plugin_legacy",
-                             "ebin", "view_flat.beam"]))).
 
 fixtures_stay_clean(Config) ->
     %% Every case works on a copy, so the checked-in fixtures must show no

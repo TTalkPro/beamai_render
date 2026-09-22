@@ -19,7 +19,7 @@
 
 **目标**：`rebar3 ct` 可跑；spec harness 就位；旧实现清出构建路径。
 
-- [x] `rebar.config`（零依赖，见 [05 §8](05-rebar3-plugin.md#8-本仓自身的构建)）+ `src/beamai_render.app.src`（library app，无 `mod` 项）
+- [x] `rebar.config`（零依赖，见 [05 §7](05-rebar3-plugin.md#7-本仓自身的构建)）+ `src/beamai_render.app.src`（library app，无 `mod` 项）
 - [x] `.gitignore` 增补 `_gen/`；`Makefile` / `erlang.mk` 降级为非主路径
 - [x] 旧实现移出构建路径，暂存于 `attic/`，阶段 6 删除：`beamai_mustache` / `beamai_mustache_loader` / `beamai_mustache_parser` / `beamai_mustache_runner` / `beamai_render_app` / `beamai_render_sup` / `ai_dom_node` / `ai_dom_render` / `examples/dom_render.erl`。其中 `beamai_mustache_parser` 与 `beamai_mustache_runner` 是阶段 2/3 的移植参考，必须一并保留
 - [x] vendoring mustache 官方 spec 的 6 个必选模块 JSON 到 `test/spec/`（另存 3 个可选模块备查）
@@ -66,12 +66,11 @@
 
 **目标**：`rebar3 compile` 自动把 `.mustache` 编译成 `.erl`。
 
-- [x] `rebar3_beamai_render/` 子项目骨架 + `rebar3_beamai_render_prv`（[05](05-rebar3-plugin.md)）
+- [x] `rebar3_beamai_render/` 子项目骨架 + `rebar3_beamai_render_mustache`（[05](05-rebar3-plugin.md)）
 - [x] 增量编译（内容 hash，读生成物的 `-mustache_source` attribute，无 cache 文件）
 - [x] 模块命名与重名冲突检测
 - [x] 孤儿 `.erl` 清理
 - [x] partial 缺失的交叉校验
-- [x] `rebar3 mustache migrate`（[03 §7.2](03-semantics.md#72-rebar3-mustache-migrate)）
 - [x] plugin 自身的测试（用 `test/fixtures/` 下的小项目做端到端）
 
 **验收**：`examples/` 用 plugin 全流程跑通；改 partial 不重编父模板可被观测验证。
@@ -86,7 +85,7 @@
 - [x] `beamai_mustache_transform`：三 pass 骨架（[06 §5](06-parse-transform.md#5-实现骨架)）
 - [x] 形态 (a)：`-mustache_tag` 声明与校验 + compiler 的 `{ext, ...}` 编译
 - [x] 形态 (b)：`beamai_mustache:inline/2` 展开 + 运行期降级实现
-- [x] 形态 (c)：`-mustache_template` 函数生成 + plugin 侧 staleness 兜底（[05 §6](05-rebar3-plugin.md#6--mustache_template-的-staleness-兜底)）
+- [x] 形态 (c)：`-mustache_template` 函数生成 + plugin 侧 staleness 兜底（[05 §5](05-rebar3-plugin.md#5--mustache_template-的-staleness-兜底)）
 - [x] marker 冲突检测
 
 **验收**：`test/fixtures/` 中有一个用到全部三种形态的示例项目，编译并渲染正确；故意写错的扩展模块能在编译期报出可读错误。
@@ -110,7 +109,7 @@
 
 | 风险 | 缓解 |
 |---|---|
-| 语义切换破坏下游（aiwiki 等） | `migrate` 子命令 + 明确的 Incompatible Changes 公告 + 版本号跳 0.4.0 |
+| 语义切换破坏下游（aiwiki 等） | 明确的 Incompatible Changes 公告 + 版本号跳 0.4.0 |
 | 官方 spec 与 beamai_render 扩展语法冲突 | 扩展用独立 marker，spec 测试集单独 suite，deviation 显式清单化 |
 | 生成模块数量膨胀导致 atom 表增长 | 模块名来自文件系统而非用户输入，数量有界；文档中说明 |
 | 形态 (c) 的依赖跟踪 | plugin `touch` 兜底；README 中标注为 plugin-recommended |

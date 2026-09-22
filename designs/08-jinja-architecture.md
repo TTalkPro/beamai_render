@@ -156,7 +156,7 @@ beamai_render/
 │   └── beamai_jinja.hrl               # 新 · Jinja 的 token / AST / opts / error
 └── rebar3_beamai_render/
     └── src/
-        ├── rebar3_beamai_render_prv.erl      # 参数化 engine
+        ├── rebar3_beamai_render_mustache.erl      # 参数化 engine
         ├── rebar3_beamai_render_jinja.erl    # 新 · `rebar3 jinja` provider
         └── ...                        # scan/name/emit/gc/stale/check 全部参数化
 ```

@@ -18,11 +18,10 @@
 | `rebar3_beamai_render_check` | 无引擎相关逻辑，只需接受 engine 以便错误文案正确 |
 | `rebar3_beamai_render_gc` | banner 前缀参数化（孤儿识别靠它） |
 | `rebar3_beamai_render_stale` | 属性名参数化 |
-| `rebar3_beamai_render_prv` | 抽出 `run/3`（多一个 engine 参数），provider 定义保持 |
-| `rebar3_beamai_render_migrate` | **不动**。migrate 是 mustache 语义迁移专用，Jinja 没有对应需求 |
+| `rebar3_beamai_render_mustache` | 抽出 `run/3`（多一个 engine 参数），provider 定义保持 |
 
 **新增**一个模块 `rebar3_beamai_render_jinja`，只做 provider 注册，`do/1` 转发给
-`rebar3_beamai_render_prv:run/3` 并传 `beamai_jinja_engine`。
+`rebar3_beamai_render_mustache:run/3` 并传 `beamai_jinja_engine`。
 
 ### 1.2 `#mopts{}` 的变化
 

@@ -2,7 +2,7 @@
 %%% rebar3_beamai_render -- internal data contract.
 %%%
 %%% Types, records and constants only. Shared by the provider, the scanner,
-%%% the naming/checking passes and the migrate command.
+%%% and the naming/checking passes.
 %%%-------------------------------------------------------------------
 -ifndef(REBAR3_BEAMAI_RENDER_HRL).
 -define(REBAR3_BEAMAI_RENDER_HRL, true).

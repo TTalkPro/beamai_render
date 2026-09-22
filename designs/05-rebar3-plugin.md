@@ -42,11 +42,11 @@
 
 init(State) ->
     lists:foldl(fun(M, {ok, S}) -> M:init(S) end, {ok, State},
-                [rebar3_beamai_render_prv, rebar3_beamai_render_migrate]).
+                [rebar3_beamai_render_mustache]).
 ```
 
 ```erlang
--module(rebar3_beamai_render_prv).
+-module(rebar3_beamai_render_mustache).
 -behaviour(provider).
 -export([init/1, do/1, format_error/1]).
 
@@ -105,18 +105,7 @@ views/layout/default.mustache →  view_layout_default
 
 **冲突检测**：`shared/item.mustache` 与 `shared_item.mustache` 会撞名，plugin 必须在扫描后做一次全量重名检查并报错，而不是静默覆盖。
 
-## 5. `rebar3 mustache migrate`
-
-语义迁移辅助（见 [03 §7.2](03-semantics.md#72-rebar3-mustache-migrate)）：
-
-```
-rebar3 mustache migrate          # 只输出 diff
-rebar3 mustache migrate --write  # 落盘
-```
-
-对每个 section body 内前缀匹配所在 section key 的引用剥掉前缀；无法确定的原样保留并在报告末尾列出，交人工处理。
-
-## 6. `-mustache_template` 的 staleness 兜底
+## 5. `-mustache_template` 的 staleness 兜底
 
 parse_transform 的「编译入口」形态（见 [06 §4](06-parse-transform.md#4-形态-c：编译入口)）有个 rebar3 认不出的依赖：改 `views/index.mustache` 不会触发 `my_views.erl` 重编。
 
@@ -124,7 +113,7 @@ parse_transform 的「编译入口」形态（见 [06 §4](06-parse-transform.md
 
 > 这是 D1 选择「三种形态全要」的已知成本。形态 (a) 与 (b) 没有这个问题。
 
-## 7. erlang.mk 接入（降级支持）
+## 6. erlang.mk 接入（降级支持）
 
 ```makefile
 BUILD_DEPS = rebar3_beamai_render
@@ -134,7 +123,7 @@ dep_rebar3_beamai_render = git https://github.com/DavidAlphaFox/beamai_render.gi
 
 erlang.mk 支持 `DEP_PLUGINS` 加载 rebar3 plugin。本仓自身的 `Makefile` 保留但不再是主构建路径，CI 以 rebar3 为准。
 
-## 8. 本仓自身的构建
+## 7. 本仓自身的构建
 
 `rebar.config`：
 

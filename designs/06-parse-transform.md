@@ -153,7 +153,7 @@ greet(Name) ->
 
 改 `views/index.mustache` 不会触发 `my_views.erl` 重编 —— parse_transform 无法向 rebar3 注册额外的文件依赖（只有 `-include` 会被跟踪）。
 
-**兜底方案**：plugin 扫描所有 `-mustache_template` attribute 建反向依赖表，模板 hash 变化时 `touch` 对应 `.erl`。详见 [05 §6](05-rebar3-plugin.md#6--mustache_template-的-staleness-兜底)。
+**兜底方案**：plugin 扫描所有 `-mustache_template` attribute 建反向依赖表，模板 hash 变化时 `touch` 对应 `.erl`。详见 [05 §5](05-rebar3-plugin.md#5--mustache_template-的-staleness-兜底)。
 
 这是三种形态里唯一需要外部机制兜底的，也是它与 rebar3 plugin 功能重叠的部分。保留它的价值在于**不依赖 plugin 也能用**（比如纯 erlang.mk 或手写 Makefile 的项目）。
 

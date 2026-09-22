@@ -8,6 +8,7 @@ layout, template semantics and the rendering API.
 | Document | |
 |---|---|
 | [The Jinja2 engine](jinja.md) | Supported syntax, values, autoescaping, configuration and every deviation from the reference implementation |
+| [The Markdown engine](markdown.md) | CommonMark, the thirty extensions, the four renderers, writing an extension, and the parse_transform |
 | [Using the parse_transform](parse-transform.md) | The three source forms: extension tags, inline templates, file templates |
 | [Benchmark](../bench/README.md) | Methodology and results against v0.3.7 |
 | [Design notes](../designs/README.md) | Why the engine is built this way, and the decisions behind it |

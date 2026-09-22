@@ -1,0 +1,7 @@
+-module(mf_missing).
+-compile({parse_transform, beamai_markdown_transform}).
+-export([f/0]).
+
+-markdown_document({gone, "views/no_such.md"}).
+
+f() -> gone().

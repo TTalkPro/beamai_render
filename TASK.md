@@ -108,3 +108,7 @@ beamai_render 全面重构任务清单。任务细节见 [`tasks/`](tasks/)，�
 ## 阶段 14 · 收尾
 
 - [x] [T55](tasks/T55.md) 文档、示例与性能基线
+
+## 阶段 15 · Markdown 引擎
+
+- [x] [T56](tasks/T56.md) markdig 移植：CommonMark、30 个扩展、四个渲染器、parse_transform

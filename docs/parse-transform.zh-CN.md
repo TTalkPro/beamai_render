@@ -286,3 +286,18 @@ jinja 的内联模板还额外不能带 `{% include %}`、`{% extends %}`、`{% 
 不加就静默渲染成空」。
 
 语言本身见 [Jinja2 引擎](jinja.zh-CN.md)。
+
+## markdown 的 transform
+
+`beamai_markdown_transform` 有两种形态，没有扩展 attribute：Markdown 引擎的扩展在配置块里
+按名字给出。
+
+| 形态 | markdown |
+|---|---|
+| **(b)** 内联 | `beamai_markdown:inline(~"...")`——折叠成它的 HTML |
+| **(c)** 文件文档 | `-markdown_document({about, "docs/about.md"}).`——生成 `about/0` 与 `about_iolist/0` |
+| 配置块 | `markdown_opts`：`extensions`、`views`、`render` |
+| 关掉 (b) 的警告 | `nowarn_markdown_inline` |
+
+文档没有 context，所以生成的函数不带参数，展开结果就是一个 binary 字面量。三个 transform
+可以同时作用于一个模块。详见 [Markdown 引擎](markdown.zh-CN.md)。

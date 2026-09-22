@@ -1,0 +1,7 @@
+-module(mf_clash).
+-compile({parse_transform, beamai_markdown_transform}).
+-export([page/0]).
+
+-markdown_document({page, "views/md_doc.md"}).
+
+page() -> <<"by hand">>.

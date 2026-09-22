@@ -2,14 +2,18 @@
 
 [English](README.md) · [中文](README.zh-CN.md)
 
-Template engines for Erlang that compile templates into Erlang modules.
-Mustache and **Jinja2**, side by side.
+Rendering tools for Erlang: two template engines that compile templates into
+Erlang modules -- Mustache and **Jinja2**, side by side -- and a
+**Markdown** engine that renders CommonMark with markdig's thirty extensions.
 
 Templates are turned into `.erl` files at build time by a rebar3 plugin, so at
 run time rendering is a plain function call: no process, no ETS table, no
-lookup of any kind.
+lookup of any kind. Markdown renders at run time, with the same discipline: a
+pipeline is a plain map, and nothing is cached anywhere.
 
 - Passes all 136 cases of the six required [mustache spec](https://github.com/mustache/spec) modules
+- Passes all 652 CommonMark 0.31.2 examples, every markdig extension spec and
+  the 649-example byte-exact roundtrip suite
 - Zero dependencies: the library and its test suite need nothing but OTP
 - Static template text lives in the module's literal pool and is shared across
   processes by reference
@@ -45,7 +49,36 @@ provider only collects its own orphans.
 {jinja_opts,    [{views, "views"}, {suffix, ".j2"}, {prefix, "j2_"}]}.
 ```
 
+## Markdown
+
+```erlang
+beamai_markdown:to_html(~"Hello *world*!").
+%% => <<"<p>Hello <em>world</em>!</p>\n">>
+
+P = beamai_markdown:pipeline([pipe_tables, task_lists, footnotes]),
+beamai_markdown:to_html(Text, P).
+
+beamai_markdown:to_html(Text, advanced).   %% markdig's UseAdvancedExtensions
+beamai_markdown:to_plain_text(Text).
+beamai_markdown:normalize(Text).           %% canonical Markdown
+beamai_markdown:to_roundtrip(Text).        %% the same bytes back
+```
+
+A port of [markdig](https://github.com/xoofx/markdig) by way of
+[cl-markding](https://github.com/DavidAlphaFox/cl-markding): CommonMark
+0.31.2, thirty extensions (pipe and grid tables, task lists, footnotes,
+mathematics, emoji, SmartyPants, alerts, ...), and HTML, plain-text,
+normalize and roundtrip renderers. `beamai_markdown_transform` folds a
+literal `beamai_markdown:inline/1` call or a `-markdown_document` file into
+its HTML at compile time. Everything is in [docs/markdown.md](docs/markdown.md).
+
 ---
+
+## What is new in 0.6.0
+
+The Markdown engine and `beamai_markdown_transform`. The template engines
+are unchanged. Full notes in [CHANGELOG.md](CHANGELOG.md); the engine itself
+is documented in [docs/markdown.md](docs/markdown.md).
 
 ## What is new in 0.5.0
 
@@ -716,6 +749,7 @@ pins its output byte for byte.
 
 ## Documentation
 
+- [The Markdown engine](docs/markdown.md) -- CommonMark, the thirty extensions, the four renderers
 - [Using the parse_transform](docs/parse-transform.md) -- extension tags, inline templates, file templates
 - [Benchmark](bench/README.md) -- methodology and results
 - [Design notes](designs/README.md) -- why the engine is built this way
@@ -725,6 +759,11 @@ pins its output byte for byte.
 The scanner's tag-splitting logic derives from
 [bbmustache](https://github.com/soranoba/bbmustache) by Hinagiku Soranoba,
 used under the MIT licence.
+
+The Markdown engine is a port of [markdig](https://github.com/xoofx/markdig)
+by Alexandre Mutel (BSD-2-Clause), by way of
+[cl-markding](https://github.com/DavidAlphaFox/cl-markding); its data tables
+and spec files are markdig's.
 
 ## Licence
 

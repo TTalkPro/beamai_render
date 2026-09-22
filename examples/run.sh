@@ -48,3 +48,8 @@ echo
 echo "==> rendering (jinja: inheritance, macros, filters)"
 erl -noshell -pa _build/default/lib/*/ebin -pa _build/default/checkouts/*/ebin \
     -eval 'io:format("~ts~n", [jinja_demo:render()]), halt().'
+
+echo
+echo "==> rendering (markdown: run-time pipeline, and a document folded at compile time)"
+erl -noshell -pa _build/default/lib/*/ebin -pa _build/default/checkouts/*/ebin \
+    -eval 'io:format("~ts~n~ts~n", [markdown_demo:render(), markdown_demo:about()]), halt().'

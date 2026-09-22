@@ -1,10 +1,10 @@
 {application, beamai_render,
- [{description, "Mustache and Jinja2 template engines that compile templates to Erlang modules"},
-  {vsn, "0.5.0"},
+ [{description, "Mustache and Jinja2 template engines that compile templates to Erlang modules, and a Markdown renderer"},
+  {vsn, "0.6.0"},
   {registered, []},
   {applications, [kernel, stdlib]},
   {env, []},
   {modules, []},
-  {licenses, ["MIT"]},
+  {licenses, ["Apache-2.0"]},
   {links, [{"GitHub", "https://github.com/DavidAlphaFox/beamai_render"}]}
  ]}.

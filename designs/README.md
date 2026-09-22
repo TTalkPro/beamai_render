@@ -29,6 +29,12 @@
 | [12-jinja-toolchain.md](12-jinja-toolchain.md) | plugin 引擎参数化、`rebar3 jinja`、parse_transform |
 | [13-jinja-roadmap.md](13-jinja-roadmap.md) | 阶段划分、关键路径、可裁剪项、规模估计 |
 
+### Markdown 引擎（v0.6）
+
+| 文档 | 内容 |
+|---|---|
+| [14-markdown-architecture.md](14-markdown-architecture.md) | 函数式移植 markdig 的决策：扁平 inline list 与 zipper 配对、祖先编辑、有序表扩展点、区间式 roundtrip |
+
 ## 重构三大目标
 
 1. **符合 Erlang 最佳实践，去掉 ets 缓存机制** —— 模板编译成 BEAM 模块，用 code server 替代 ets，运行期零进程零查表。

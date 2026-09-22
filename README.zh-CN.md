@@ -2,11 +2,13 @@
 
 [English](README.md) · [中文](README.zh-CN.md)
 
-把模板编译成 Erlang 模块的模板引擎。Mustache 与 **Jinja2**，并列提供。
+Erlang 平台上的渲染工具集合：两个把模板编译成 Erlang 模块的模板引擎——Mustache 与
+**Jinja2**，并列提供——以及一个带 markdig 全部 30 个扩展的 **Markdown** 引擎。
 
-模板在构建期由 rebar3 plugin 编译成 `.erl` 文件，因此运行期的渲染就是一次普通函数调用：没有进程，没有 ETS 表，不查任何表。
+模板在构建期由 rebar3 plugin 编译成 `.erl` 文件，因此运行期的渲染就是一次普通函数调用：没有进程，没有 ETS 表，不查任何表。Markdown 在运行期渲染，纪律相同：pipeline 是普通 map，什么都不缓存。
 
 - 通过 [mustache spec](https://github.com/mustache/spec) 六个必选模块的全部 136 个用例
+- 通过 CommonMark 0.31.2 全部 652 个用例、每个 markdig 扩展 spec，以及 649 例逐字节 roundtrip 套件
 - 零依赖：库和测试套件都只依赖 OTP
 - 静态模板文本进入模块的 literal pool，跨进程按引用共享
 
@@ -40,7 +42,34 @@
 {jinja_opts,    [{views, "views"}, {suffix, ".j2"}, {prefix, "j2_"}]}.
 ```
 
+## Markdown
+
+```erlang
+beamai_markdown:to_html(~"Hello *world*!").
+%% => <<"<p>Hello <em>world</em>!</p>\n">>
+
+P = beamai_markdown:pipeline([pipe_tables, task_lists, footnotes]),
+beamai_markdown:to_html(Text, P).
+
+beamai_markdown:to_html(Text, advanced).   %% markdig 的 UseAdvancedExtensions
+beamai_markdown:to_plain_text(Text).
+beamai_markdown:normalize(Text).           %% 规范化 Markdown
+beamai_markdown:to_roundtrip(Text).        %% 原样的字节
+```
+
+经 [cl-markding](https://github.com/DavidAlphaFox/cl-markding) 从
+[markdig](https://github.com/xoofx/markdig) 移植：CommonMark 0.31.2、30 个扩展（管道表与
+网格表、任务列表、脚注、数学公式、emoji、SmartyPants、alert……），以及 HTML、纯文本、
+normalize、roundtrip 四个渲染器。`beamai_markdown_transform` 在编译期把字面量的
+`beamai_markdown:inline/1` 调用或 `-markdown_document` 文件折叠成 HTML。详见
+[docs/markdown.zh-CN.md](docs/markdown.zh-CN.md)。
+
 ---
+
+## 0.6.0 新增
+
+Markdown 引擎与 `beamai_markdown_transform`。模板引擎没有变化。完整说明见
+[CHANGELOG.md](CHANGELOG.md)，引擎本身的文档见 [docs/markdown.zh-CN.md](docs/markdown.zh-CN.md)。
 
 ## 0.5.0 新增
 

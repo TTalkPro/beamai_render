@@ -1,5 +1,26 @@
 # Changelog
 
+## 0.6.0 — the Markdown engine
+
+A third engine, and the first that renders at run time rather than compiling
+to modules. The template engines are unchanged.
+
+### Added
+
+- **A Markdown engine**, `beamai_markdown`: CommonMark 0.31.2 (652/652 spec
+  examples) with markdig's thirty extensions, each passing its own markdig
+  spec file, and four renderers -- HTML, plain text, normalize (canonical
+  Markdown) and roundtrip (649/649 byte-exact). A port of markdig by way of
+  cl-markding. Pipelines are plain maps; there is no cache, no ets, no
+  process. See [docs/markdown.md](docs/markdown.md).
+- **`beamai_markdown_transform`**: a literal `beamai_markdown:inline/1` call
+  folds to its HTML at compile time, and `-markdown_document({Name, Path})`
+  renders a file into `Name/0` and `Name_iolist/0`, both through the
+  module's `markdown_opts`.
+- The markdig data tables (Unicode categories, HTML5 entities, emoji, bidi
+  ranges) as generated modules, with `tools/gen_markdown_data.py` to
+  regenerate them.
+
 ## 0.5.0 — the Jinja2 engine
 
 beamai_render now ships two template engines side by side. Mustache is unchanged in

@@ -349,3 +349,19 @@ enforced identically on the run-time path, through one shared predicate, so a
 template cannot be a build error one way and silently empty the other.
 
 See [The Jinja2 engine](jinja.md) for the language itself.
+
+## The markdown transform
+
+`beamai_markdown_transform` has two forms, and no extension attribute: the
+Markdown engine's extensions are named in the option block instead.
+
+| Form | markdown |
+|---|---|
+| **(b)** inline | `beamai_markdown:inline(~"...")` -- folds to its HTML |
+| **(c)** file document | `-markdown_document({about, "docs/about.md"}).` -- `about/0` and `about_iolist/0` |
+| Option block | `markdown_opts`: `extensions`, `views`, `render` |
+| Silence the (b) warning | `nowarn_markdown_inline` |
+
+A document has no context, so the generated functions take no argument and
+the expansion is a single binary literal. All three transforms may be applied
+to one module. See [The Markdown engine](markdown.md).

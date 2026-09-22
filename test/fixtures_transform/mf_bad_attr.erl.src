@@ -1,0 +1,9 @@
+-module(mf_bad_attr).
+-compile({parse_transform, beamai_markdown_transform}).
+-export([f/0]).
+
+-markdown_document(42).
+-markdown_document({page, "views/md_doc.md"}).
+-markdown_document({page, "views/md_doc.md"}).
+
+f() -> ok.

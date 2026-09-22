@@ -1,0 +1,5 @@
+-module(mf_not_literal).
+-compile({parse_transform, beamai_markdown_transform}).
+-export([f/1]).
+
+f(Md) -> beamai_markdown:inline(Md).

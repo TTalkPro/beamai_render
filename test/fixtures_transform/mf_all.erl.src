@@ -1,0 +1,15 @@
+%% Both markdown source forms in one module.
+-module(mf_all).
+-compile({parse_transform, beamai_markdown_transform}).
+-export([banner/0, doc/0, doc_io/0, twice/0]).
+
+-markdown_document({page, "views/md_doc.md"}).
+
+banner() -> beamai_markdown:inline(~"Hello *there* :)").
+
+doc() -> page().
+
+doc_io() -> page_iolist().
+
+%% Two expansions in one function.
+twice() -> [beamai_markdown:inline(~"a"), beamai_markdown:inline(~"b")].

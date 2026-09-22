@@ -72,8 +72,7 @@ beamai_render/
 │   ├── rebar.config
 │   └── src/
 │       ├── rebar3_beamai_render.erl         # init/1 注册 provider
-│       ├── rebar3_beamai_render_prv.erl     # compile provider
-│       └── rebar3_beamai_render_migrate.erl # migrate provider（语义迁移辅助）
+│       └── rebar3_beamai_render_mustache.erl     # compile provider
 ├── scripts/check.sh                  # 一键 compile / eunit / xref / dialyzer
 ├── test/
 │   ├── beamai_mustache_test_lib.erl      # spec 加载、key 转换、用例名归一、阶段判定

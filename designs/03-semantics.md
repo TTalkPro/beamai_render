@@ -106,21 +106,12 @@ view_shared_item:render_stack(S, <<"    ">>)
 
 规则：**在 section `{{#X}}` 的 body 内部，把以 `X.` 开头的引用剥掉这层前缀。**
 
-### 7.2 `rebar3 mustache migrate`
-
-提供机械改写子命令：
-
-- 解析模板得到 AST，对每个 section 记录其 key 路径
-- 在 body 内遍历所有 `{{tag}}` / `{{#}}` / `{{+}}` 的 keys，若前缀匹配所在 section 的 key，剥掉前缀
-- 输出 diff，`--write` 才真正落盘
-- **不做的事**：无法确定的（比如引用了兄弟 section 的变量、跨 partial 的隐式依赖）原样保留并在报告中列出，交人工处理
-
-### 7.3 影响范围
+### 7.2 影响范围
 
 - 本仓 `examples/shared/{item,user,level}.mustache` + `examples/complex.mustache`
 - 下游：[aiwiki](https://github.com/DavidAlphaFox/aiwiki) 及其它使用方
 
-### 7.4 版本与公告
+### 7.3 版本与公告
 
 - 版本号跳到 **0.4.0**，README 顶部加 **Incompatible Changes** 段落（沿用现有 v0.3.5 的公告体例）
 - 明确写出：v0.3.x 的扁平全路径语义已移除，无兼容开关

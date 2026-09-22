@@ -1,0 +1,7 @@
+%%% A block-form extension used from an inline template.
+-module(tf_wrap).
+-compile({parse_transform, beamai_mustache_transform}).
+-mustache_tag({$%, my_wrap}).
+-export([wrap/1]).
+
+wrap(V) -> beamai_mustache:inline(<<"[{{%b}}{{v}}{{/b}}]">>, #{v => V}).

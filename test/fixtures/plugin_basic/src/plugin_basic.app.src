@@ -1,0 +1,8 @@
+{application, plugin_basic,
+ [{description, "rebar3_beamai_render end-to-end fixture"},
+  {vsn, "0.1.0"},
+  {registered, []},
+  {applications, [kernel, stdlib, beamai_render]},
+  {env, []},
+  {modules, []}
+ ]}.

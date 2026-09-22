@@ -1,0 +1,8 @@
+{application, examples,
+ [{description, "beamai_render worked example"},
+  {vsn, "0.4.0"},
+  {registered, []},
+  {applications, [kernel, stdlib, beamai_render]},
+  {env, []},
+  {modules, []}
+ ]}.

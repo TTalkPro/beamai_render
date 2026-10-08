@@ -1,4 +1,4 @@
-# beamai_render
+# BeamAI Render
 
 [English](README.md) · [中文](README.zh-CN.md)
 
@@ -360,7 +360,7 @@ context 和模板里的 key 都是 **atom**：
 #{title => <<"我的博客"/utf8>>}
 ```
 
-这是 Erlang 本身的行为，不是 beamai_render 引入的，但它是"模板明明没问题、页面却是乱码"最常见的成因。
+这是 Erlang 本身的行为，不是 BeamAI Render 引入的，但它是"模板明明没问题、页面却是乱码"最常见的成因。
 
 ### 名字解析
 
@@ -484,7 +484,7 @@ end.
 
 ## Lambda
 
-`{{*name}}` 是 beamai_render 的扩展。它的输出**不转义** —— 产出标记正是它的用途。
+`{{*name}}` 是 BeamAI Render 的扩展。它的输出**不转义** —— 产出标记正是它的用途。
 
 ```erlang
 %% fun/1：收到当前 frame
@@ -548,8 +548,8 @@ greet(Name) -> beamai_mustache:inline(~"Hello {{name}}!", #{name => Name}).
 
 | | |
 |---|---|
-| `{{+x}}` / `{{-x}}` | beamai_render 扩展；spec 没有这两个 tag |
-| `{{*x}}` | beamai_render 扩展 |
+| `{{+x}}` / `{{-x}}` | BeamAI Render 扩展；spec 没有这两个 tag |
+| `{{*x}}` | BeamAI Render 扩展 |
 | key 类型 | atom，spec 用字符串 |
 | Lambda | 返回值不会被再次当作模板解析 |
 | Dynamic Names、Blocks | 未实现（spec 的可选模块） |
@@ -586,7 +586,7 @@ sh examples/run.sh
 
 ---
 
-## 使用 beamai_render 的项目
+## 使用 BeamAI Render 的项目
 
 - [aiwiki](https://github.com/DavidAlphaFox/aiwiki) —— 一个非常简单的博客。它的模板早于 0.4.0，需要迁移。
 

@@ -1,4 +1,4 @@
-# beamai_render
+# BeamAI Render
 
 [English](README.md) · [中文](README.zh-CN.md)
 
@@ -139,7 +139,7 @@ indented only the first line.
 
 ### ailib is no longer a dependency
 
-Everything beamai_render used from it is now implemented in `beamai_mustache_rt`, which
+Everything BeamAI Render used from it is now implemented in `beamai_mustache_rt`, which
 depends only on OTP.
 
 ### Other fixed behaviour
@@ -387,7 +387,7 @@ your own source does:
 #{title => <<"我的博客"/utf8>>}
 ```
 
-This is ordinary Erlang, not something beamai_render introduces, but it is the most
+This is ordinary Erlang, not something BeamAI Render introduces, but it is the most
 common way to end up with mojibake in a page whose templates are fine.
 
 ### Development-time reloading
@@ -559,7 +559,7 @@ The template says `{{*body}}`.
 
 ## Lambdas
 
-`{{*name}}` is an beamai_render extension. Its output is **not** escaped -- producing
+`{{*name}}` is a BeamAI Render extension. Its output is **not** escaped -- producing
 markup is the point.
 
 ```erlang
@@ -690,8 +690,8 @@ Partials, Sections -- all pass. These are deliberate deviations:
 
 | | |
 |---|---|
-| `{{+x}}` / `{{-x}}` | beamai_render extensions; the spec has no such tags |
-| `{{*x}}` | beamai_render extension |
+| `{{+x}}` / `{{-x}}` | BeamAI Render extensions; the spec has no such tags |
+| `{{*x}}` | BeamAI Render extension |
 | Key type | atoms, where the spec uses strings |
 | Lambdas | return values are not re-parsed as templates |
 | Dynamic Names, Blocks | not implemented (optional spec modules) |
@@ -740,7 +740,7 @@ The example is deliberately dense: it covers partial indentation, `{{+}}` and
 `0` that is truthy, `{{.}}`, and a `fun/2` lambda. `test/examples_tests.erl`
 pins its output byte for byte.
 
-## Projects using beamai_render
+## Projects using BeamAI Render
 
 - [aiwiki](https://github.com/DavidAlphaFox/aiwiki) -- a very simple blog.
   Its templates predate 0.4.0 and need migrating.

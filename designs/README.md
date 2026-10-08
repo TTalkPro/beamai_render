@@ -1,6 +1,6 @@
-# beamai_render 全面重构设计文档
+# BeamAI Render 全面重构设计文档
 
-本目录记录 beamai_render 从「运行期 ets 缓存 + 解释执行」重构为「编译期生成 Erlang 模块」的完整设计。
+本目录记录 BeamAI Render 从「运行期 ets 缓存 + 解释执行」重构为「编译期生成 Erlang 模块」的完整设计。
 
 ## 任务追踪
 

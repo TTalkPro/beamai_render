@@ -1,4 +1,4 @@
-# beamai_render 文档
+# BeamAI Render 文档
 
 [English](README.md) · [中文](README.zh-CN.md)
 
